@@ -26,6 +26,8 @@ env/
 dist/
 build/
 .eggs/
+.env
+venv
 
 # === MySQL Dump files ===
 *.sql
