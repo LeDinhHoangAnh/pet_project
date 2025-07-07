@@ -12,5 +12,5 @@ class Movies(models.Model):
     update_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'movies'

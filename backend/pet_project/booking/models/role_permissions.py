@@ -6,6 +6,6 @@ class RolePermissions(models.Model):
     permission = models.ForeignKey(Permissions, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'role_permissions'
         unique_together = (('role', 'permission'),)

@@ -1,0 +1,67 @@
+# === Python ===
+*.py[cod]
+__pycache__/
+*.so
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# === Django ===
+*.sqlite3
+media/
+staticfiles/
+local_settings.py
+.env
+.env.*
+
+# === Virtual Environment ===
+venv/
+ENV/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# === MySQL Dump files ===
+*.sql
+
+# === Django Migrations ===
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+*/migrations/*.log
+*/migrations/*.sqlite3
+*/migrations/*.db
+*/migrations/0001_initial.py  # nếu bạn không muốn theo dõi migration khởi đầu (tuỳ chọn)
+
+# === Node (React) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+
+# === React build artifacts ===
+frontend/build/
+frontend/.env
+
+# === macOS ===
+.DS_Store
+
+# === VSCode ===
+.vscode/
+.code-workspace
+
+# === Docker ===
+*.pid
+*.pid.lock
+*.sock
+docker-compose.override.yml
+db_data/

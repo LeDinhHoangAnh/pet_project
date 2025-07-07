@@ -11,5 +11,5 @@ class Payments(models.Model):
     create_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'payments'

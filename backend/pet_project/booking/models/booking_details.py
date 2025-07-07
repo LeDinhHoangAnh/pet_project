@@ -8,6 +8,6 @@ class BookingDetails(models.Model):
     update_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'booking_details'
         unique_together = (('booking', 'seat'),)
