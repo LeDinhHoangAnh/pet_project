@@ -1,12 +1,9 @@
+// src/App.js
 import React from 'react';
-import MovieList from './pages/MovieList';
+import HomePage from './pages/HomePage';
 
 function App() {
-  return (
-    <div className="App">
-      <MovieList />
-    </div>
-  );
+  return <HomePage />;
 }
 
 export default App;

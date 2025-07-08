@@ -1,7 +1,9 @@
+// src/api/movieApi.js
 import axios from 'axios';
 
-const API = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-});
+const API_BASE = 'http://localhost:8000/api/movies/';
 
-export const getAllMovies = () => API.get('movies/');
+export const getAllMovies = async () => {
+  const res = await axios.get(API_BASE);
+  return res.data;
+};
