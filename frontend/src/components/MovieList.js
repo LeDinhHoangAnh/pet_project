@@ -3,7 +3,7 @@ import { getAllMovies } from '../api/movieApi';
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
-
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   useEffect(() => {
     const fetch = async () => {
       const data = await getAllMovies();
@@ -21,7 +21,7 @@ const MovieList = () => {
         {movies.map((movie) => (
           <div key={movie.id} className="border shadow rounded overflow-hidden hover:shadow-lg">
               <img
-              src={`http://localhost:8000${movie.movie_poster_url}`}
+              src={`${BASE_URL}${movie.movie_poster_url}`}
               alt={movie.title}
               className="rounded-md w-full h-64 object-cover"
             />

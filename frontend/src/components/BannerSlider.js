@@ -33,11 +33,12 @@ const BannerSlider = () => {
       <Slider {...settings}>
         {banners.map((movie) => (
           <div key={movie.id}>
-            <img
-              src={`http://localhost:8000${movie.movie_poster_url}`}
-              alt={movie.title}
-              className="rounded-md w-full h-64 object-cover"
-            />
+          <img
+            src={`http://localhost:8000${movie.movie_poster_url}`}
+            alt={movie.title}
+            className="rounded-md w-full h-64 object-cover"
+          />
+
             <div className="p-4 bg-black bg-opacity-60 text-white absolute bottom-0 w-full">
               <h2 className="text-xl font-bold">{movie.title}</h2>
               <p>{movie.description || 'Không có mô tả'}</p>
