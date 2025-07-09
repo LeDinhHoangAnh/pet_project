@@ -7,3 +7,7 @@ class Permissions(models.Model):
     class Meta:
         managed = True
         db_table = 'permissions'
+        verbose_name = 'Permission'
+    def __str__(self):
+        return f"{self.permission_name}"
+    

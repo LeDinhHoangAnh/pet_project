@@ -9,3 +9,6 @@ class RolePermissions(models.Model):
         managed = True
         db_table = 'role_permissions'
         unique_together = (('role', 'permission'),)
+        verbose_name = 'Role Permission'
+    def __str__(self):
+        return f"{self.role} - {self.permission}"

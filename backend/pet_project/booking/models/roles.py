@@ -8,3 +8,6 @@ class Roles(models.Model):
     class Meta:
         managed = True
         db_table = 'roles'
+        verbose_name = "Role"
+    def __str__(self):
+        return f"{self.role_name}"
