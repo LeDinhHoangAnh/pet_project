@@ -1,4 +1,4 @@
-from booking.models import Users
+from booking.models.users import Users
 
 def create_user(**kwargs):
     return Users.objects.create(**kwargs)

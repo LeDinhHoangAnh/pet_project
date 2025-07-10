@@ -13,7 +13,7 @@ from booking.models.admins import Admins
 from booking.models.roles import Roles
 from booking.models.permissions import Permissions
 from booking.models.role_permissions import RolePermissions
-
+from booking.models.users import Users
 @admin.register(Admins)
 class AdminsAdmin(admin.ModelAdmin):
     list_display = ('id', 'admin_name', 'admin_email', 'role', 'created_at')
@@ -34,3 +34,4 @@ class PermissionsAdmin(admin.ModelAdmin):
 class RolePermissionsAdmin(admin.ModelAdmin):
     list_display = ('role', 'permission')
     search_fields = ('role__role_name', 'permission__permission_name')
+admin.site.register(Users)

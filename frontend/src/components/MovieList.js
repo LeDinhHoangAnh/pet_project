@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { getAllMovies } from '../api/movieApi';
+import { getAllMovies, getGenresByMovie } from '../api/movieApi';
 import TrailerModal from './TrailerModal';
+
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
   const [trailerInfo, setTrailerInfo] = useState({ url: '', title: '' });
-
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
+  const [movieGenres, setMovieGenres] = useState({});
   useEffect(() => {
     const fetch = async () => {
       const data = await getAllMovies();
       setMovies(data);
+
+      const genresMap = {};
+      for (const movie of data) {
+        const genres = await getGenresByMovie(movie.id);
+        genresMap[movie.id] = genres.map(g => g.genre_name).join(', ');
+      }
+      setMovieGenres(genresMap);
     };
     fetch();
   }, []);
@@ -54,8 +61,8 @@ const MovieList = () => {
                 </a>
               </h3>
               <p className="text-sm text-gray-600">Thời lượng: {movie.duration} phút</p>
+              <p className="text-sm text-gray-600 italic">Thể loại: {movieGenres[movie.id] || 'Đang cập nhật...'}</p>
             </div>
-
             <button
               onClick={() => window.location.href = `/booking/${movie.id}`}
               className="mt-2 bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition"

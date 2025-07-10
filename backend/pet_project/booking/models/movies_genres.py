@@ -3,7 +3,7 @@ from booking.models.movies import Movies
 from booking.models.genres import Genres
 
 class MoviesGenres(models.Model):
-    movie = models.OneToOneField(Movies, models.DO_NOTHING, primary_key=True)  # The composite primary key (movie_id, genre_id) found, that is not supported. The first column is selected.
+    movie = models.ForeignKey(Movies, models.DO_NOTHING) 
     genre = models.ForeignKey(Genres, models.DO_NOTHING)
     create_at = models.DateTimeField(auto_now_add=True)  
     update_at = models.DateTimeField(auto_now=True)  

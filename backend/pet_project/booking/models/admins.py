@@ -11,3 +11,4 @@ class Admins(models.Model):
     class Meta:
         managed = True
         db_table = 'admins'
+        verbose_name = 'Admin'

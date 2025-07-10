@@ -5,7 +5,7 @@ from booking.views.auth_view import RegisterAPIView, LoginAPIView
 from booking.views.role_view import RoleListCreateView, RoleDetailView
 from booking.views.permission_view import PermissionListCreateView, PermissionDetailView
 from booking.views.admin_view import AdminListCreateView, AdminUpdateDeleteView
-
+from booking.views.movieGenre_view import MovieGenresByMovieAPIView
 
 urlpatterns = [
     path('movies/<int:movie_id>/showtimes/', ShowtimesByMovie.as_view(), name='showtimes-by-movie'),
@@ -24,5 +24,8 @@ urlpatterns = [
     path('permissions/<int:permission_id>/', PermissionDetailView.as_view(), name='permission-detail'),
     path('admins/', AdminListCreateView.as_view(), name='admin-list-create'),
     path('admins/<int:admin_id>/', AdminUpdateDeleteView.as_view(), name='admin-update-delete'),
+    path('movies/<int:movie_id>/genres/', MovieGenresByMovieAPIView.as_view()),
 ]
+
+
 

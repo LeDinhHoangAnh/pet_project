@@ -9,10 +9,10 @@ import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col"> {/* wrapper toàn bộ */}
+    <div className="min-h-screen flex flex-col">
       <Router>
         <Header />
-        <main className="flex-grow">
+        <main className="flex-grow mt-20">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movies/:id" element={<MovieDetailPage />} />

@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieById, getShowtimesByMovie } from '../api/movieApi';
+import { getMovieById, getShowtimesByMovie,getGenresByMovie } from '../api/movieApi';
 import ShowtimeList from '../components/ShowTime';
 
 const MovieDetailPage = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [showtimes, setShowtimes] = useState([]);
+  const [movieGenres, setMovieGenres] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const movieData = await getMovieById(id);
       setMovie(movieData);
 
-       const showtimeData = await getShowtimesByMovie(id);
-       setShowtimes(showtimeData);
+      const showtimeData = await getShowtimesByMovie(id);
+      setShowtimes(showtimeData);
+      
+      const genreData = await getGenresByMovie(id);
+      setMovieGenres(genreData.map(g => g.genre_name));
     };
     fetchData();
   }, [id]);
@@ -37,9 +41,9 @@ const MovieDetailPage = () => {
             <h1 className="text-3xl font-bold mb-2">{movie.title}</h1>
             <p className="mb-4">{movie.description}</p>
             <ul className="text-sm space-y-1">
-              <li><strong>Thể loại:</strong> {movie.genre || 'Đang cập nhật'}</li>
+              <li><strong>Thể loại:</strong> {movieGenres.join(', ') || 'Đang cập nhật ...'}</li>
               <li><strong>Thời lượng:</strong> {movie.duration} phút</li>
-              <li><strong>Ngôn ngữ:</strong> {movie.language || 'Tiếng Việt'}</li>
+              <li><strong>Độ tuổi:</strong> {movie.age_rating} + </li>
               <li><strong>Ngày khởi chiếu:</strong> {movie.release_date}</li>
               <li><strong>Đạo diễn:</strong> {movie.director || 'Chưa rõ'}</li>
               <li><strong>Diễn viên:</strong> {movie.cast || 'Đang cập nhật'}</li>
@@ -49,7 +53,7 @@ const MovieDetailPage = () => {
 
       </div>
       <div className="ml-6">
-      <ShowtimeList showtimes={showtimes} />
+      <ShowtimeList showtimes={showtimes} movieTitle={movie.title}/>
 
       </div>
       {youtubeId && (

@@ -16,3 +16,8 @@ export const getShowtimesByMovie = async (movieId) => {
   const res = await axios.get(`${API_BASE}/api/movies/${movieId}/showtimes/`);
   return res.data;
 };
+
+export const getGenresByMovie = async (movieId) => {
+  const res = await axios.get(`${API_BASE}/api/movies/${movieId}/genres/`);
+  return res.data.map(item => item.genre);  // lấy phần genre trong mỗi movie_genre
+};
