@@ -1,22 +1,10 @@
-# booking/serializers/showtime_serializer.py
 from rest_framework import serializers
 from booking.models.showtimes import Showtimes
-from booking.models.rooms import Rooms
 from booking.models.movies import Movies
 from booking.models.rooms import Rooms
+from booking.models.genres import Genres
 from booking.models.movies_genres import MoviesGenres
 
-class RoomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rooms
-        fields = ['id', 'room_name']
-
-class ShowtimeSerializer(serializers.ModelSerializer):
-    room = RoomSerializer()
-
-    class Meta:
-        model = Showtimes
-        fields = ['id', 'start_time', 'base_price', 'room']
 class GenreSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     genre_name = serializers.CharField()

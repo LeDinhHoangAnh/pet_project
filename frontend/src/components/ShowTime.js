@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import TicketModal from '../components/TicketModal';
+import { getSeatStatusByShowtime } from '../api/seatApi'; 
 
 const ShowtimeList = ({ showtimes, movieTitle }) => {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [selectedShowtime, setSelectedShowtime] = useState(null);
-
+  const [seatAvailability, setSeatAvailability] = useState({});
   const handleShowtimeClick = (showtime) => {
     setSelectedShowtime(showtime);
   };
+    const showtimesOfDay = showtimes.filter((show) =>
+    dayjs(show.start_time).format('YYYY-MM-DD') === selectedDate
+  );
 
   useEffect(() => {
     // Tạo danh sách 7 ngày từ hôm nay
@@ -20,14 +24,35 @@ const ShowtimeList = ({ showtimes, movieTitle }) => {
     setDates(days);
   }, []);
 
+    useEffect(() => {
+    const fetchAllSeatAvailability = async () => {
+      const results = {};
+      for (const show of showtimesOfDay) {
+        try {
+          const seatData = await getSeatStatusByShowtime(show.id);
+          const availableSeats = seatData.seats.filter(
+            (s) => s.status === 'available'
+          ).length;
+          results[show.id] = availableSeats;
+        } catch (error) {
+          console.error('Lỗi khi tải số lượng ghế:', error);
+          results[show.id] = 0; // fallback
+        }
+      }
+      setSeatAvailability(results);
+    };
+
+    if (showtimesOfDay.length) {
+      fetchAllSeatAvailability();
+    }
+  }, [showtimesOfDay]);
+
+
   const formatDateLabel = (date) => {
     const d = dayjs(date);
     return `${d.format('DD')}/07 - ${d.format('dd').toUpperCase()}`;
   };
 
-  const showtimesOfDay = showtimes.filter((show) =>
-    dayjs(show.start_time).format('YYYY-MM-DD') === selectedDate
-  );
 
   return (
     <div className="mt-10">
@@ -62,7 +87,11 @@ const ShowtimeList = ({ showtimes, movieTitle }) => {
                  onClick={() => handleShowtimeClick(show)}
               >
                 <div className="font-medium text-md">{dayjs(show.start_time).format('HH:mm')}</div>
-                <div className="text-xs text-gray-600">170 ghế trống</div>
+                 <div className="text-xs text-gray-600">
+                  {seatAvailability[show.id] !== undefined
+                    ? `${seatAvailability[show.id]} ghế trống`
+                    : 'Đang tải...'}
+                </div>
               </div>
             ))}
           </div>

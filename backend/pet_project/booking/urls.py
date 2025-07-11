@@ -1,11 +1,14 @@
 from django.urls import path
+from booking.views.seatPrice_view import SeatPriceView
 from booking.views.movie_view import AdminMovieListCreate, AdminMovieDetail
-from booking.views.showtime_view import ShowtimesByMovie
+from booking.views.showtime_view import ShowtimesByMovie, ShowtimeDetailAPIView
 from booking.views.auth_view import RegisterAPIView, LoginAPIView
 from booking.views.role_view import RoleListCreateView, RoleDetailView
 from booking.views.permission_view import PermissionListCreateView, PermissionDetailView
 from booking.views.admin_view import AdminListCreateView, AdminUpdateDeleteView
 from booking.views.movieGenre_view import MovieGenresByMovieAPIView
+from booking.views.seat_view import SeatByShowtimeView
+from booking.views.seat_view import SeatStatusShowtimeView
 
 urlpatterns = [
     path('movies/<int:movie_id>/showtimes/', ShowtimesByMovie.as_view(), name='showtimes-by-movie'),
@@ -25,7 +28,12 @@ urlpatterns = [
     path('admins/', AdminListCreateView.as_view(), name='admin-list-create'),
     path('admins/<int:admin_id>/', AdminUpdateDeleteView.as_view(), name='admin-update-delete'),
     path('movies/<int:movie_id>/genres/', MovieGenresByMovieAPIView.as_view()),
+    path('showtimes/<int:showtime_id>/seats/', SeatByShowtimeView.as_view(), name='seats-by-showtime'),
+    path('showtimes/<int:showtime_id>/seat_status/', SeatStatusShowtimeView.as_view(), name='seats-status-by-showtime'),
+    path('seat-prices/<int:showtime_id>/', SeatPriceView.as_view(), name='get_seat_prices'),
+    path('showtimes/<int:showtime_id>/detail/', ShowtimeDetailAPIView.as_view(),name='showtime-detail'),
 ]
+
 
 
 
