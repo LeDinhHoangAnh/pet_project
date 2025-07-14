@@ -9,7 +9,8 @@ from booking.views.admin_view import AdminListCreateView, AdminUpdateDeleteView
 from booking.views.movieGenre_view import MovieGenresByMovieAPIView
 from booking.views.seat_view import SeatByShowtimeView
 from booking.views.seat_view import SeatStatusShowtimeView
-
+from booking.views.service_view import ServiceListView
+from booking.views.userProfile_view import UserProfileView
 urlpatterns = [
     path('movies/<int:movie_id>/showtimes/', ShowtimesByMovie.as_view(), name='showtimes-by-movie'),
     # ... các API khác
@@ -32,6 +33,11 @@ urlpatterns = [
     path('showtimes/<int:showtime_id>/seat_status/', SeatStatusShowtimeView.as_view(), name='seats-status-by-showtime'),
     path('seat-prices/<int:showtime_id>/', SeatPriceView.as_view(), name='get_seat_prices'),
     path('showtimes/<int:showtime_id>/detail/', ShowtimeDetailAPIView.as_view(),name='showtime-detail'),
+    path('services/', ServiceListView.as_view(), name='get-all-services'),
+    path('user/profile/', UserProfileView.as_view(), name='user-profile'),
+
+
+
 ]
 
 

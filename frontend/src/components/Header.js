@@ -6,7 +6,6 @@ import { isLoggedIn, getCurrentUser, logout } from '../utils/auth';
 const Header = () => {
   const navigate = useNavigate();
   const user = getCurrentUser();
-
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -29,8 +28,16 @@ const Header = () => {
               </>
             ) : (
               <>
-                <li>👋 Xin chào, <strong>{user?.user_name || 'User'}</strong></li>
-                <li><button onClick={handleLogout} className="text-red-400 hover:underline">Đăng xuất</button></li>
+                <li>
+                  <Link to="/profile" className="hover:underline">
+                    👋 Xin chào, <strong>{user?.user_name || 'User'}</strong>
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="text-red-400 hover:underline">
+                    Đăng xuất
+                  </button>
+                </li>
               </>
             )}
           </ul>

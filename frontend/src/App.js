@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import BookingPage from './pages/BookingPage';
-
+import ProfilePage from './pages/ProfilePage';
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -20,6 +20,7 @@ function App() {
             <Route path="/booking/:showtimeId" element={<BookingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
         <Footer />

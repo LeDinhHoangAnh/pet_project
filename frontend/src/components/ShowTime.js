@@ -9,6 +9,7 @@ const ShowtimeList = ({ showtimes, movieTitle }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [selectedShowtime, setSelectedShowtime] = useState(null);
   const [seatAvailability, setSeatAvailability] = useState({});
+  const [hasFetched, setHasFetched] = useState(false);
   const handleShowtimeClick = (showtime) => {
     setSelectedShowtime(showtime);
   };
@@ -40,9 +41,11 @@ const ShowtimeList = ({ showtimes, movieTitle }) => {
         }
       }
       setSeatAvailability(results);
+      setHasFetched(true);
+
     };
 
-    if (showtimesOfDay.length) {
+    if (showtimesOfDay.length > 0 && !hasFetched) {
       fetchAllSeatAvailability();
     }
   }, [showtimesOfDay]);
@@ -80,20 +83,24 @@ const ShowtimeList = ({ showtimes, movieTitle }) => {
         <div className="space-y-4">
           <div className="text-lg font-semibold">2D Phụ đề</div>
           <div className="flex flex-wrap gap-4">
-            {showtimesOfDay.map((show) => (
-              <div
-                key={show.id}
-                 className="border p-4 rounded shadow-sm cursor-pointer hover:bg-gray-100"
-                 onClick={() => handleShowtimeClick(show)}
-              >
-                <div className="font-medium text-md">{dayjs(show.start_time).format('HH:mm')}</div>
-                 <div className="text-xs text-gray-600">
-                  {seatAvailability[show.id] !== undefined
-                    ? `${seatAvailability[show.id]} ghế trống`
-                    : 'Đang tải...'}
+            {[...showtimesOfDay]
+              .sort((a, b) => new Date(a.start_time) - new Date(b.start_time))
+              .map((show) => (
+                <div
+                  key={show.id}
+                  className="border p-4 rounded shadow-sm cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleShowtimeClick(show)}
+                >
+                  <div className="font-medium text-md">
+                    {dayjs(show.start_time).format('HH:mm')}
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {seatAvailability[show.id] !== undefined
+                      ? `${seatAvailability[show.id]} ghế trống`
+                      : 'Đang tải...'}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}

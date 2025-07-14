@@ -8,7 +8,11 @@ const MovieDetailPage = () => {
   const [movie, setMovie] = useState(null);
   const [showtimes, setShowtimes] = useState([]);
   const [movieGenres, setMovieGenres] = useState([]);
-
+  const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const [year, month, day] = dateString.split('-');
+  return `${day}-${month}-${year}`;
+  };
   useEffect(() => {
     const fetchData = async () => {
       const movieData = await getMovieById(id);
@@ -24,9 +28,7 @@ const MovieDetailPage = () => {
   }, [id]);
 
   if (!movie) return <p className="text-center">Đang tải chi tiết phim...</p>;
-
   const youtubeId = movie.trailer_url?.split('v=')[1]?.split('&')[0];
-
   return (
     <>
       <div className="container mx-auto px-4 py-8 mt-5">
@@ -44,7 +46,7 @@ const MovieDetailPage = () => {
               <li><strong>Thể loại:</strong> {movieGenres.join(', ') || 'Đang cập nhật ...'}</li>
               <li><strong>Thời lượng:</strong> {movie.duration} phút</li>
               <li><strong>Độ tuổi:</strong> {movie.age_rating} + </li>
-              <li><strong>Ngày khởi chiếu:</strong> {movie.release_date}</li>
+              <li><strong>Ngày khởi chiếu:</strong> {formatDate(movie.release_date)}</li>
               <li><strong>Đạo diễn:</strong> {movie.director || 'Chưa rõ'}</li>
               <li><strong>Diễn viên:</strong> {movie.cast || 'Đang cập nhật'}</li>
             </ul>

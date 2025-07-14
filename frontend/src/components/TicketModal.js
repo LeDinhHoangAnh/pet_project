@@ -1,4 +1,11 @@
 import React from 'react';
+const formatDateDMY = (isoDate) => {
+  const d = new Date(isoDate);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+};
 
 const TicketModal = ({ show, onClose, showtime }) => {
   if (!show) return null;
@@ -8,8 +15,13 @@ const TicketModal = ({ show, onClose, showtime }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">🎟️ Mua Vé</h2>
         <p><strong>Phim:</strong> {showtime?.movie?.title || 'Không có tên phim'}</p>
-        <p><strong>Ngày:</strong> {new Date(showtime.start_time).toLocaleDateString()}</p>
-        <p><strong>Giờ:</strong> {new Date(showtime.start_time).toLocaleTimeString()}</p>
+        <p><strong>Ngày:</strong> {formatDateDMY(showtime.start_time)}</p>
+        <strong>Giờ:</strong>{' '}
+          {new Date(showtime.start_time).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false, // 24h format
+          })}
 
         <div className="flex justify-end gap-2 mt-6">
           <button
