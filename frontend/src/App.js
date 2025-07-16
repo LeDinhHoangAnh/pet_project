@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import BookingPage from './pages/BookingPage';
 import ProfilePage from './pages/ProfilePage';
+import BookingHistoryPage from './pages/BookingHistoryPage';
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/movies/:id" element={<MovieDetailPage />} />
             <Route path="/booking/:showtimeId" element={<BookingPage />} />
+            <Route path="/history" element={<BookingHistoryPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />

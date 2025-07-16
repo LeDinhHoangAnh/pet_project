@@ -24,11 +24,6 @@ export const logout = () => {
   localStorage.removeItem('token');
 };
 
-// export const isLoggedIn = () => {
-//   return !!getToken();
-// };
-
-// src/utils/auth.js
 export const isLoggedIn = () => !!localStorage.getItem('token');
 
 export const getCurrentUser = () => {

@@ -7,62 +7,40 @@ from rest_framework import status, permissions
 from booking.services.userProfile_service import UserProfileService
 from booking.models.users import Users
 from django.db.models import Q
+from rest_framework import status
+from booking.views.jwt_auth import jwt_required
 
 class UserProfileView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    # def get(self, request):
-    #     serializer = UserProfileSerializer(request.user)
-    #     return Response(serializer.data)
-
-    # def put(self, request):
-    #     serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    @jwt_required
     def get(self, request):
-        email = request.query_params.get('email')
-        if not email:
-            return Response({"error": "Missing email"}, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user  # ✅ Đã có từ decorator
+        return Response({
+            "id": user.id,
+            "user_email": user.user_email,
+            "user_name": user.user_name,
+            "user_phone": user.user_phone,
+            "user_address": user.user_address,
+        })
 
-        user = UserProfileService.get_profile_by_email(email)
-        if not user:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = UserProfileSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
+    @jwt_required
     def put(self, request):
-        email = request.data.get('user_email')
-        if not email:
-            return Response({"error": "Missing email"}, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+        data = request.data
 
-        user = UserProfileService.get_profile_by_email(email)
-        if not user:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        if 'user_name' in data:
+            if Users.objects.exclude(id=user.id).filter(user_name=data['user_name']).exists():
+                return Response({'error': 'Tên đã tồn tại'}, status=400)
 
-        # Kiểm tra trùng tên hoặc số điện thoại (nhưng không tính chính user này)
-        name = request.data.get('user_name')
-        phone = request.data.get('user_phone')
+        if 'user_phone' in data:
+            if Users.objects.exclude(id=user.id).filter(user_phone=data['user_phone']).exists():
+                return Response({'error': 'SĐT đã tồn tại'}, status=400)
 
-        if name:
-            if Users.objects.filter(user_name=name).exclude(user_email=email).exists():
-                return Response({"error": "Tên người dùng đã tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
+        user.user_name = data.get('user_name', user.user_name)
+        user.user_phone = data.get('user_phone', user.user_phone)
+        user.user_address = data.get('user_address', user.user_address)
+        user.save()
 
-        if phone:
-            if Users.objects.filter(user_phone=phone).exclude(user_email=email).exists():
-                return Response({"error": "Số điện thoại đã được sử dụng."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Tiến hành cập nhật
-        serializer = UserProfileSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        
+        return Response({"message": "Cập nhật thành công"})
 
 
 

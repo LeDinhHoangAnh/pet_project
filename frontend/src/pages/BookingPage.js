@@ -5,6 +5,9 @@ import axios from 'axios';
 import { getSeatStatusByShowtime } from '../api/seatApi';
 import ServiceSelector from './ServiceSelector';
 import CheckoutPage from './CheckoutPage';
+import { getProfile } from '../api/userApi';
+import { createBooking } from '../api/bookingApi';
+import { useNavigate } from 'react-router-dom';
 
 const BookingPage = () => {
   const { showtimeId } = useParams();
@@ -17,7 +20,9 @@ const BookingPage = () => {
   const [quantities, setQuantities] = useState({});
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState('select-seat'); // 'select-seat' | 'select-service' | 'checkout'
+  const [userData, setUserData] = useState(null);
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const navigate = useNavigate();
 
   const formatDateDMY = (isoDate) => {
     const d = new Date(isoDate);
@@ -47,6 +52,19 @@ const BookingPage = () => {
     };
     fetchAll();
   }, [showtimeId]);
+
+  useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const res = await getProfile();
+          setUserData(res.data);
+          console.log("Thông tin người dùng:", res.data);
+        } catch (err) {
+          console.error("Lỗi lấy thông tin người dùng:", err);
+        }
+      };
+      fetchUser();
+  }, []);
 
   const toggleSeat = (seat) => {
     if (seat.status !== 'available') return;
@@ -101,6 +119,26 @@ const BookingPage = () => {
     else if (step === 'checkout') setStep('select-service');
   };
 
+  const handleBooking = async () => {
+    try {
+      const bookingData = {
+        showtime_id: showtimeId, // truyền từ props hoặc context
+        seat_ids: selectedSeats.map(seat => seat.id),
+        services: selectedServices.map(s => ({ id: s.id, quantity: s.quantity })),
+        total_price: totalSeatPrice + selectedServices.reduce((sum, s) => sum + s.quantity * s.service_price, 0)
+      };
+
+      const res = await createBooking(bookingData);
+      const bookingId = res.data.booking_id; // backend nên trả về booking_id
+
+      alert('Đặt vé thành công!');
+      navigate(`/ve-da-dat/${bookingId}`);
+    } catch (error) {
+      console.error("Lỗi đặt vé:", error);
+      alert('Đặt vé thất bại!');
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto mt-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
       {step === 'select-seat' && (
@@ -114,12 +152,14 @@ const BookingPage = () => {
                 {grouped[row].map(seat => {
                   const isBooked = seat.status !== 'available';
                   const isSelected = selectedSeats.find(s => s.id === seat.id);
+                  const price = seatPrices[String(seat.seat_type_name)] || 0;
+
                   const style = isBooked
                     ? 'bg-gray-400 text-white cursor-not-allowed'
                     : isSelected
                       ? 'bg-blue-600 text-white'
                       : 'bg-white hover:bg-blue-100';
-                  const price = seatPrices[String(seat.seat_type_name)] || 0;
+
                   return (
                     <button
                       key={seat.id}
@@ -159,7 +199,7 @@ const BookingPage = () => {
 
       {step === 'checkout' && (
         <CheckoutPage
-          user={{ name: 'Nguyễn Văn A', email: 'a@gmail.com', phone: '0901234567' }}
+          user={{ name: userData.user_name, email: userData.user_email, phone: userData.user_phone }}
           selectedSeats={selectedSeats}
           selectedServices={selectedServices}
           totalSeatPrice={totalSeatPrice}
@@ -206,7 +246,7 @@ const BookingPage = () => {
           )}
           {step === 'checkout' && (
             <button
-              onClick={() => alert('Tiến hành thanh toán...')}
+              onClick={handleBooking}
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
             >
               Thanh toán

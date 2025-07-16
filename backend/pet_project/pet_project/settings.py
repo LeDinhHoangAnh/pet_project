@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+from datetime import timedelta
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -60,8 +61,8 @@ MIDDLEWARE = [
 
 ]
 
-# CORS_ALLOWED_ORIGINS = [config('CORS_ALLOWED_ORIGINS')]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [config('CORS_ALLOWED_ORIGINS')]
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'authorization',
 ]

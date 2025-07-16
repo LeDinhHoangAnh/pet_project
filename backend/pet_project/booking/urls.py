@@ -11,6 +11,11 @@ from booking.views.seat_view import SeatByShowtimeView
 from booking.views.seat_view import SeatStatusShowtimeView
 from booking.views.service_view import ServiceListView
 from booking.views.userProfile_view import UserProfileView
+from rest_framework_simplejwt.views import TokenRefreshView
+from booking.views.token_view import MyTokenObtainPairView
+from booking.views.booking_view import BookingCreateView
+from booking.views.bookingHistory_view import BookingHistoryView
+
 urlpatterns = [
     path('movies/<int:movie_id>/showtimes/', ShowtimesByMovie.as_view(), name='showtimes-by-movie'),
     # ... các API khác
@@ -21,7 +26,7 @@ urlpatterns = [
     path('movies/<int:pk>/', AdminMovieDetail.as_view(), name='admin-movie-detail'),
     path('movies/<int:movie_id>/showtimes/', ShowtimesByMovie.as_view(), name='showtimes-by-movie'),
     path('auth/register/', RegisterAPIView.as_view()),
-    path('auth/login/', LoginAPIView.as_view()),
+    path('auth/login1/', LoginAPIView.as_view()),
     path('roles/', RoleListCreateView.as_view(), name='role-list-create'),
     path('roles/<int:role_id>/', RoleDetailView.as_view(), name='role-detail'),
     path('permissions/', PermissionListCreateView.as_view(), name='permission-list-create'),
@@ -35,9 +40,11 @@ urlpatterns = [
     path('showtimes/<int:showtime_id>/detail/', ShowtimeDetailAPIView.as_view(),name='showtime-detail'),
     path('services/', ServiceListView.as_view(), name='get-all-services'),
     path('user/profile/', UserProfileView.as_view(), name='user-profile'),
-
-
-
+    path('auth/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/profile/', UserProfileView.as_view(), name='user_profile'),
+    path('bookings/', BookingCreateView.as_view(), name='create-booking'),
+    path('booking/history/', BookingHistoryView.as_view(), name='booking-history'),
 ]
 
 

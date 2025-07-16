@@ -18,3 +18,4 @@ class Bookings(models.Model):
     class Meta:
         managed = True
         db_table = 'bookings'
+        verbose_name = 'Booking'

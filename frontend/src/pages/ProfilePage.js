@@ -1,139 +1,93 @@
-// src/pages/ProfilePage.js
+// pages/ProfilePage.jsx
 import React, { useEffect, useState } from 'react';
 import { getProfile, updateProfile } from '../api/userApi';
-import { getCurrentUser } from '../utils/auth';
 
 const ProfilePage = () => {
-  const [formData, setFormData] = useState({
-    user_name: '',
-    user_phone: '',
-    user_address: '',
-    user_email: '',
-  });
-  const [editMode, setEditMode] = useState(false);
-  const [originalData, setOriginalData] = useState({});
-  const [message, setMessage] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const user = getCurrentUser(); // lấy user từ localStorage
-  console.log(user)
-  useEffect(() => {
-    if (user && user.email) {
-      getProfile(user.email) // truyền email hiện tại vào API
-        .then((data) => {
-          setFormData(data);
-          setOriginalData(data);
-        })
-        .catch((err) => {
-          console.error(err);
-          setMessage('Không thể tải thông tin người dùng');
-        });
+  const fetchUser = async () => {
+    try {
+      const res = await getProfile();
+      setUserData(res.data);
+    } catch (err) {
+      console.error("Lỗi lấy thông tin:", err);
     }
-  }, [user]);
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSave = async () => {
     try {
-      await updateProfile(formData);
-      setEditMode(false);
-      setMessage('✅ Cập nhật thành công!');
-      setOriginalData(formData);
+      await updateProfile(userData);
+      setIsEditing(false);
     } catch (err) {
-      const msg = err.response?.data?.error || '❌ Lỗi khi cập nhật.';
-      setMessage(msg);
+      alert('Cập nhật thất bại!');
     }
   };
 
-  const handleCancel = () => {
-    setFormData(originalData);
-    setEditMode(false);
-    setMessage(null);
-  };
+  if (!userData) return <div>Đang tải...</div>;
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-6">👤 Thông tin cá nhân</h2>
-      {message && <p className="mb-4 text-blue-600">{message}</p>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-md mx-auto mt-10 bg-white shadow p-6 rounded">
+      <h2 className="text-2xl font-bold mb-4">👤 Thông tin cá nhân</h2>
+      <div className="space-y-4">
         <div>
-          <label className="block font-medium">Tên người dùng</label>
+          <label>Email:</label>
           <input
-            type="text"
-            name="user_name"
-            value={formData.user_name}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-            disabled={!editMode}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Số điện thoại</label>
-          <input
-            type="text"
-            name="user_phone"
-            value={formData.user_phone}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-            disabled={!editMode}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Địa chỉ</label>
-          <input
-            type="text"
-            name="user_address"
-            value={formData.user_address}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-            disabled={!editMode}
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-500">Email</label>
-          <input
-            type="text"
-            name="user_email"
-            value={formData.user_email}
             disabled
-            className="w-full border px-3 py-2 rounded bg-gray-100 cursor-not-allowed"
+            value={userData.user_email}
+            className="w-full p-2 border rounded bg-gray-100"
+          />
+        </div>
+        <div>
+          <label>Họ tên:</label>
+          <input
+            name="user_name"
+            value={userData.user_name}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Số điện thoại:</label>
+          <input
+            name="user_phone"
+            value={userData.user_phone}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Địa chỉ:</label>
+          <input
+            name="user_address"
+            value={userData.user_address}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="w-full p-2 border rounded"
           />
         </div>
 
-        {!editMode ? (
-          <button
-            type="button"
-            onClick={() => setEditMode(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Thay đổi thông tin
-          </button>
-        ) : (
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              Lưu
-            </button>
-          </div>
-        )}
-      </form>
+        <div className="flex justify-end gap-2">
+          {isEditing ? (
+            <>
+              <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-400 text-white rounded">Hủy</button>
+              <button onClick={handleSave} className="px-4 py-2 bg-green-600 text-white rounded">Lưu</button>
+            </>
+          ) : (
+            <button onClick={() => setIsEditing(true)} className="px-4 py-2 bg-blue-600 text-white rounded">Thay đổi</button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

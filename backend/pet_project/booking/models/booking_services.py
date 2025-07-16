@@ -13,3 +13,4 @@ class BookingServices(models.Model):
     class Meta:
         managed = True
         db_table = 'booking_services'
+        verbose_name = 'Booking Service'

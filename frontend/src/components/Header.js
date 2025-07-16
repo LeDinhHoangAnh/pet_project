@@ -20,7 +20,7 @@ const Header = () => {
             <li><Link to="/">Trang chủ</Link></li>
             <li><Link to="/lich-chieu">Lịch chiếu</Link></li>
             <li><Link to="/phim">Phim</Link></li>
-            <li><Link to="/dat-ve">Đặt vé</Link></li>
+            <li><Link to="/history">Thông tin đặt vé</Link></li>
             {!isLoggedIn() ? (
               <>
                 <li><Link to="/login">Đăng nhập</Link></li>
