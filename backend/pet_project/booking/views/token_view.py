@@ -1,5 +1,0 @@
-from rest_framework_simplejwt.views import TokenObtainPairView
-from booking.serializers.customToken_serializer import CustomTokenObtainPairSerializer
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer

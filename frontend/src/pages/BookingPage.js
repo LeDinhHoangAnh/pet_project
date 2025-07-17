@@ -132,7 +132,7 @@ const BookingPage = () => {
       const bookingId = res.data.booking_id; // backend nên trả về booking_id
 
       alert('Đặt vé thành công!');
-      navigate(`/ve-da-dat/${bookingId}`);
+      navigate(`/history`);
     } catch (error) {
       console.error("Lỗi đặt vé:", error);
       alert('Đặt vé thất bại!');
