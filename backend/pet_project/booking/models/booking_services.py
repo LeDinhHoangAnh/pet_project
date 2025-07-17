@@ -7,9 +7,9 @@ class BookingServices(models.Model):
     service = models.ForeignKey('Services', models.DO_NOTHING)
     quantity = models.IntegerField()
     unit_price = models.IntegerField()
-    create_at = models.DateTimeField(blank=True, null=True)
-    update_at = models.DateTimeField(blank=True, null=True)
-
+    create_at = models.DateTimeField(auto_now_add=True)  
+    update_at = models.DateTimeField(auto_now=True)  
+    
     class Meta:
         managed = True
         db_table = 'booking_services'

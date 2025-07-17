@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from booking.serializers.showtime_serializer import ShowtimeSerializer
+from booking.serializers.showtime_serializer import ShowtimeSerializer, ShowtimesGroupedByDateSerializer
 from booking.services.showtime_service import ShowtimeService
 from booking.serializers.showtime_detail_serializer import ShowtimeDetailSerializer
 
@@ -23,3 +23,9 @@ class ShowtimeDetailAPIView(APIView):
             )
         serializer = ShowtimeDetailSerializer(showtime)
         return Response(serializer.data, status=status.HTTP_200_OK)
+class MoviesGroupedByShowDateAPIView(APIView):
+  def get(self, request):
+        data = ShowtimeService.get_showtimes_by_date()
+        serializer = ShowtimesGroupedByDateSerializer(data, many=True)
+        return Response(serializer.data)
+

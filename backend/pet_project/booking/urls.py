@@ -1,7 +1,7 @@
 from django.urls import path
 from booking.views.seatPrice_view import SeatPriceView
 from booking.views.movie_view import AdminMovieListCreate, AdminMovieDetail
-from booking.views.showtime_view import ShowtimesByMovie, ShowtimeDetailAPIView
+from booking.views.showtime_view import ShowtimesByMovie, ShowtimeDetailAPIView, MoviesGroupedByShowDateAPIView
 from booking.views.auth_view import RegisterAPIView, LoginAPIView
 from booking.views.role_view import RoleListCreateView, RoleDetailView
 from booking.views.permission_view import PermissionListCreateView, PermissionDetailView
@@ -13,6 +13,7 @@ from booking.views.service_view import ServiceListView
 from booking.views.userProfile_view import UserProfileView
 from booking.views.booking_view import BookingCreateView
 from booking.views.bookingHistory_view import BookingHistoryView
+from booking.views.bookingDetail_view import BookingDetailAPIView
 
 urlpatterns = [
     path('movies/<int:movie_id>/showtimes/', ShowtimesByMovie.as_view(), name='showtimes-by-movie'),
@@ -40,6 +41,9 @@ urlpatterns = [
     path('user/profile/', UserProfileView.as_view(), name='user-profile'),
     path('bookings/', BookingCreateView.as_view(), name='create-booking'),
     path('booking/history/', BookingHistoryView.as_view(), name='booking-history'),
+    path('bookings/<int:booking_id>/details/', BookingDetailAPIView.as_view(), name='booking-detail-info'),
+    path('showtimes/by-date/', MoviesGroupedByShowDateAPIView.as_view()),
+
 ]
 
 

@@ -10,10 +10,13 @@ class Users(models.Model):
     role = models.ForeignKey(Roles, models.DO_NOTHING)
     created_at = models.DateTimeField(blank=True, null=True)
     account_type = models.CharField(max_length=50, blank=True, null=True)
-    create_at = models.DateTimeField(blank=True, null=True)
-    update_at = models.DateTimeField(blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True)  
+    update_at = models.DateTimeField(auto_now=True)  
+
 
     class Meta:
         managed = True
         db_table = 'users'
         verbose_name = 'User'
+    def __str__(self):
+        return f"{self.user_email} - {self.user_name}"

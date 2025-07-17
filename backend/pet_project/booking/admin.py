@@ -8,39 +8,14 @@ from .admin_register.seatPrice_admin import *
 from .admin_register.genre_admin import *
 from .admin_register.movieGenre_admin import *
 from .admin_register.service_admin import *
+from .admin_register.admin_admin import *
+from .admin_register.role_admin import *
+from .admin_register.permission_admin import *
+from .admin_register.rolePermission_admin import *
+from .admin_register.user_admin import *
+from .admin_register.seatStatusInShowtime_admin import *
+from .admin_register.booking_admin import *
+from .admin_register.bookingDetail_admin import *
+from .admin_register.bookingService_admin import *
 
-from django.contrib import admin
-from booking.models.admins import Admins
-from booking.models.roles import Roles
-from booking.models.permissions import Permissions
-from booking.models.role_permissions import RolePermissions
-from booking.models.users import Users
-from booking.models.seat_status_in_showtime import SeatStatusInShowtime
-from booking.models.bookings import Bookings
-from booking.models.booking_details import BookingDetails
-from booking.models.booking_services import BookingServices
-@admin.register(Admins)
-class AdminsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'admin_name', 'admin_email', 'role', 'created_at')
-    search_fields = ('admin_name', 'admin_email')
-    list_filter = ('role',)
 
-@admin.register(Roles)
-class RolesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'role_name', 'create_at', 'update_at')
-    search_fields = ('role_name',)
-
-@admin.register(Permissions)
-class PermissionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'permission_name', 'permission_description')
-    search_fields = ('permission_name',)
-
-@admin.register(RolePermissions)
-class RolePermissionsAdmin(admin.ModelAdmin):
-    list_display = ('role', 'permission')
-    search_fields = ('role__role_name', 'permission__permission_name')
-admin.site.register(Users)
-admin.site.register(SeatStatusInShowtime)
-admin.site.register(Bookings)
-admin.site.register(BookingDetails)
-admin.site.register(BookingServices)

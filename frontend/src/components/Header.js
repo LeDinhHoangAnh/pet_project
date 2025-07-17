@@ -18,7 +18,7 @@ const Header = () => {
         <nav>
           <ul className="flex space-x-4">
             <li><Link to="/">Trang chủ</Link></li>
-            <li><Link to="/lich-chieu">Lịch chiếu</Link></li>
+            <li><Link to="/movie-schedule">Lịch chiếu</Link></li>
             <li><Link to="/phim">Phim</Link></li>
             <li><Link to="/history">Thông tin đặt vé</Link></li>
             {!isLoggedIn() ? (

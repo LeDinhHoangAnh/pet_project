@@ -8,14 +8,16 @@ class Bookings(models.Model):
     showtime = models.ForeignKey('Showtimes', models.DO_NOTHING)
     total_price = models.IntegerField()
     booking_status = models.CharField(max_length=50)
-    create_at = models.DateTimeField(blank=True, null=True)
     booking_type = models.CharField(max_length=7)
     admin = models.ForeignKey(Admins, models.DO_NOTHING, blank=True, null=True)
     customer_name = models.CharField(max_length=100, blank=True, null=True)
     customer_phone = models.CharField(max_length=10, blank=True, null=True)
-    update_at = models.DateTimeField(blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True)  
+    update_at = models.DateTimeField(auto_now=True)  
 
     class Meta:
         managed = True
         db_table = 'bookings'
         verbose_name = 'Booking'
+    def __str__(self):
+        return f"{self.showtime} - {self.user}"

@@ -53,3 +53,18 @@ class ShowtimeDetailSerializer(serializers.ModelSerializer):
             'movie',
             'room',
         ]
+class ShowtimeItemSerializer(serializers.Serializer):
+    showtime_id = serializers.IntegerField()
+    start_time = serializers.DateTimeField()
+    room_name = serializers.CharField()
+
+class MovieInDateSerializer(serializers.Serializer):
+    movie_id = serializers.IntegerField()
+    title = serializers.CharField()
+    movie_poster_url = serializers.CharField()
+    duration = serializers.IntegerField()
+    showtimes = ShowtimeItemSerializer(many=True)
+
+class ShowtimesGroupedByDateSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    movies = MovieInDateSerializer(many=True)

@@ -37,3 +37,5 @@ class BookingHistorySerializer(serializers.ModelSerializer):
 
     def get_is_new(self, obj):
         return obj.create_at.date() == date.today()
+    
+   
