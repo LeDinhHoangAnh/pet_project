@@ -11,34 +11,49 @@ const TicketModal = ({ show, onClose, showtime }) => {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">🎟️ Mua Vé</h2>
-        <p><strong>Phim:</strong> {showtime?.movie?.title || 'Không có tên phim'}</p>
-        <p><strong>Ngày:</strong> {formatDateDMY(showtime.start_time)}</p>
-        <strong>Giờ:</strong>{' '}
-          {new Date(showtime.start_time).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false, // 24h format
-          })}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative animate-fade-in">
+        <div className="mb-4 border-b pb-3">
+          <h2 className="text-2xl font-bold text-blue-700 flex items-center gap-2">
+            🎟️ Mua Vé
+          </h2>
+        </div>
 
-        <div className="flex justify-end gap-2 mt-6">
+        <div className="space-y-2 text-gray-700 text-sm">
+          <div className="flex justify-between">
+            <span className="font-semibold">🎬 Phim:</span>
+            <span>{showtime?.movie?.title || 'Không có tên phim'}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-semibold">📅 Ngày chiếu:</span>
+            <span>{formatDateDMY(showtime.start_time)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-semibold">⏰ Giờ chiếu:</span>
+            <span>
+              {new Date(showtime.start_time).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              })}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-3 mt-6">
           <button
-            className="bg-gray-300 px-4 py-2 rounded"
+            className="px-4 py-2 rounded-xl bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
             onClick={onClose}
           >
             Đóng
           </button>
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
             onClick={() => {
               const token = localStorage.getItem('token');
               if (token) {
-                // Đã đăng nhập → chuyển đến trang mua vé
                 window.location.href = `/booking/${showtime.id}`;
               } else {
-                // Chưa đăng nhập → lưu lại showtimeId rồi chuyển đến login
                 localStorage.setItem('redirect_after_login', `/booking/${showtime.id}`);
                 window.location.href = '/login';
               }

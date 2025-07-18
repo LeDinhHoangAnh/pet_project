@@ -10,6 +10,7 @@ import BookingPage from './pages/BookingPage';
 import ProfilePage from './pages/ProfilePage';
 import BookingHistoryPage from './pages/BookingHistoryPage';
 import MovieSchedulePage from './pages/MovieSchedulePage';
+import MovieList from './components/MovieList';
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -24,8 +25,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-             <Route path="/movie-schedule" element={<MovieSchedulePage />} />
-           
+            <Route path="/movie-schedule" element={<MovieSchedulePage />} />
+            <Route path="/movie" element={<MovieList />} />
           </Routes>
         </main>
         <Footer />

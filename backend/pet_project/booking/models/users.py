@@ -8,11 +8,9 @@ class Users(models.Model):
     user_address = models.CharField(max_length=255)
     password_hash = models.CharField(max_length=255)
     role = models.ForeignKey(Roles, models.DO_NOTHING)
-    created_at = models.DateTimeField(blank=True, null=True)
     account_type = models.CharField(max_length=50, blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True)  
     update_at = models.DateTimeField(auto_now=True)  
-
 
     class Meta:
         managed = True

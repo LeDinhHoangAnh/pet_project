@@ -1,30 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { getAllMovies, getGenresByMovie } from '../api/movieApi';
+import React, { useEffect, useState, useRef } from 'react';
+import { getAllMovies, getGenresByMovie, getShowtimesByMovie } from '../api/movieApi';
 import TrailerModal from './TrailerModal';
-
+import ShowTimeModal from './ShowTimeModal'; // Import modal hiển thị suất chiếu
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
   const [trailerInfo, setTrailerInfo] = useState({ url: '', title: '' });
-  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [movieGenres, setMovieGenres] = useState({});
+  const [showtimeModal, setShowtimeModal] = useState({ open: false, showtimes: [], movieTitle: '' });
+  const hasFetched = useRef(false);
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetch = async () => {
+      if (hasFetched.current) return; // ✅ chỉ gọi 1 lần
+      hasFetched.current = true;
+
       const data = await getAllMovies();
       setMovies(data);
 
+      const genresResults = await Promise.all(
+        data.map(movie => getGenresByMovie(movie.id))
+      );
+
       const genresMap = {};
-      for (const movie of data) {
-        const genres = await getGenresByMovie(movie.id);
-        genresMap[movie.id] = genres.map(g => g.genre_name).join(', ');
-      }
+      data.forEach((movie, index) => {
+        genresMap[movie.id] = genresResults[index]
+          .map(g => g.genre_name)
+          .join(', ');
+      });
+
       setMovieGenres(genresMap);
     };
+
     fetch();
   }, []);
+  
+
 
   const openTrailer = (url, title) => {
     setTrailerInfo({ url, title });
+  };
+
+  const openShowtimeModal = async (movieId, movieTitle) => {
+    const showtimeData = await getShowtimesByMovie(movieId);
+    setShowtimeModal({
+      open: true,
+      showtimes: showtimeData,
+      movieTitle: movieTitle
+    });
   };
 
   if (!movies.length) return <p className="text-center">Đang tải phim...</p>;
@@ -34,7 +58,6 @@ const MovieList = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10 mb-20">
         {movies.map((movie) => (
           <div key={movie.id} className="border shadow rounded overflow-hidden hover:shadow-lg">
-            {/* CHỈ gắn sự kiện click vào ảnh */}
             <div
               className="relative group cursor-pointer"
               title={movie.title}
@@ -50,7 +73,6 @@ const MovieList = () => {
               </div>
             </div>
 
-            {/* Tiêu đề là link sang trang chi tiết */}
             <div className="p-3">
               <h3 className="text-lg font-semibold">
                 <a
@@ -64,16 +86,15 @@ const MovieList = () => {
               <p className="text-sm text-gray-600 italic">Thể loại: {movieGenres[movie.id] || 'Đang cập nhật...'}</p>
             </div>
             <button
-              onClick={() => window.location.href = `/booking/${movie.id}`}
+              onClick={() => openShowtimeModal(movie.id, movie.title)}
               className="mt-2 bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition"
             >
               🎟️ Mua vé
             </button>
           </div>
-
-          
         ))}
       </div>
+
       {trailerInfo.url && (
         <TrailerModal
           trailerUrl={trailerInfo.url}
@@ -82,6 +103,14 @@ const MovieList = () => {
         />
       )}
 
+      {showtimeModal.open && (
+        <ShowTimeModal
+          open={true} 
+          showtimes={showtimeModal.showtimes}
+          movieTitle={showtimeModal.movieTitle}
+          onClose={() => setShowtimeModal({ open: false, showtimes: [], movieTitle: '' })}
+        />
+      )}
     </div>
   );
 };

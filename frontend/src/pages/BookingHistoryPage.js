@@ -7,6 +7,7 @@ import moment from 'moment';
 const BookingHistoryPage = () => {
   const [bookings, setBookings] = useState([]);
   const [bookingDetails, setBookingDetails] = useState([]);
+
   useEffect(() => {
     const fetch = async () => {
       try {

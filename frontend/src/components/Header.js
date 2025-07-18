@@ -19,7 +19,7 @@ const Header = () => {
           <ul className="flex space-x-4">
             <li><Link to="/">Trang chủ</Link></li>
             <li><Link to="/movie-schedule">Lịch chiếu</Link></li>
-            <li><Link to="/phim">Phim</Link></li>
+            <li><Link to="/movie">Phim</Link></li>
             <li><Link to="/history">Thông tin đặt vé</Link></li>
             {!isLoggedIn() ? (
               <>
